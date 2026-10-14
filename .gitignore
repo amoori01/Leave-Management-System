@@ -36,3 +36,11 @@ coverage/
 .DS_Store
 Thumbs.db
 .qodo/
+
+# Local Project Docs & Planning (keep local only)
+.doc/
+TASKS.md
+INSTRUCTIONS.md
+COMMIT_MESSAGES.md
+CHANGELOG.md
+BACKLOG.md
