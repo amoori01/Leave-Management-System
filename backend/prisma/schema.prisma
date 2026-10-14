@@ -1,0 +1,79 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  EMPLOYEE
+  ADMIN
+}
+
+enum RequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model User {
+  id            String         @id @default(uuid())
+  name          String
+  email         String         @unique
+  password_hash String
+  role          Role           @default(EMPLOYEE)
+  leaveBalances LeaveBalance[]
+  leaveRequests LeaveRequest[] @relation("UserLeaveRequests")
+  decisionsMade LeaveRequest[] @relation("AdminDecisions")
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model LeaveType {
+  id            String         @id @default(uuid())
+  name          String         @unique
+  description   String?
+  is_paid       Boolean        @default(true)
+  leaveBalances LeaveBalance[]
+  leaveRequests LeaveRequest[]
+
+  @@map("leave_types")
+}
+
+model LeaveBalance {
+  id            String    @id @default(uuid())
+  user_id       String
+  leave_type_id String
+  year          Int
+  total_days    Int
+  user          User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  leaveType     LeaveType @relation(fields: [leave_type_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, leave_type_id, year])
+  @@map("leave_balances")
+}
+
+model LeaveRequest {
+  id            String        @id @default(uuid())
+  user_id       String
+  leave_type_id String
+  start_date    DateTime
+  end_date      DateTime
+  days_count    Int
+  reason        String?
+  status        RequestStatus @default(PENDING)
+  approved_by   String?
+  approved_at   DateTime?
+  admin_comment String?
+  created_at    DateTime      @default(now())
+
+  user          User          @relation("UserLeaveRequests", fields: [user_id], references: [id], onDelete: Cascade)
+  leaveType     LeaveType     @relation(fields: [leave_type_id], references: [id], onDelete: Cascade)
+  decider       User?         @relation("AdminDecisions", fields: [approved_by], references: [id])
+
+  @@map("leave_requests")
+}
