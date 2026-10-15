@@ -1,0 +1,13 @@
+{
+  "name": "leave-management-system",
+  "private": true,
+  "scripts": {
+    "ci": "bun run ci:backend && bun run ci:frontend",
+    "ci:backend": "cd backend && bunx prisma validate && bun test && bun run build",
+    "ci:frontend": "cd frontend && bun run build",
+    "test": "cd backend && bun test",
+    "build": "cd backend && bun run build && cd ../frontend && bun run build",
+    "dev:backend": "cd backend && bun run start:dev",
+    "dev:frontend": "cd frontend && bun run dev"
+  }
+}
