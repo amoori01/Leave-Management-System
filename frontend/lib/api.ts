@@ -172,4 +172,31 @@ export const api = {
       body: JSON.stringify({ admin_comment }),
     });
   },
+
+  async getUsers(): Promise<ManagedUser[]> {
+    return apiFetch<ManagedUser[]>('/users');
+  },
+
+  async createUser(payload: {
+    name: string;
+    email: string;
+    password: string;
+    role?: 'EMPLOYEE' | 'ADMIN';
+    annual_days?: number;
+    sick_days?: number;
+  }): Promise<ManagedUser> {
+    return apiFetch<ManagedUser>('/users', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+  },
 };
+
+export interface ManagedUser {
+  id: string;
+  name: string;
+  email: string;
+  role: 'EMPLOYEE' | 'ADMIN';
+  createdAt: string;
+  updatedAt: string;
+}

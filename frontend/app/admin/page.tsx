@@ -6,6 +6,7 @@ import {
   api,
   authStorage,
   User,
+  ManagedUser,
   LeaveRequest,
   LeaveRequestDetail,
 } from '../../lib/api';
@@ -25,16 +26,40 @@ import {
   Calendar,
   User as UserIcon,
   MessageSquare,
+  Users,
+  UserPlus,
+  Plus,
+  Lock,
+  Mail,
 } from 'lucide-react';
 
 export default function AdminDashboard() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
+  const [activeTab, setActiveTab] = useState<'REQUESTS' | 'EMPLOYEES'>('REQUESTS');
+
+  // Requests State
   const [requests, setRequests] = useState<LeaveRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [filterStatus, setFilterStatus] = useState<
     'ALL' | 'PENDING' | 'APPROVED' | 'REJECTED'
   >('ALL');
+
+  // Employees State
+  const [usersList, setUsersList] = useState<ManagedUser[]>([]);
+  const [usersLoading, setUsersLoading] = useState(false);
+
+  // Add Employee Modal State
+  const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
+  const [newUserName, setNewUserName] = useState('');
+  const [newUserEmail, setNewUserEmail] = useState('');
+  const [newUserPassword, setNewUserPassword] = useState('');
+  const [newUserRole, setNewUserRole] = useState<'EMPLOYEE' | 'ADMIN'>('EMPLOYEE');
+  const [newUserAnnualDays, setNewUserAnnualDays] = useState(20);
+  const [newUserSickDays, setNewUserSickDays] = useState(10);
+  const [addUserLoading, setAddUserLoading] = useState(false);
+  const [addUserError, setAddUserError] = useState<string | null>(null);
+  const [addUserSuccess, setAddUserSuccess] = useState<string | null>(null);
 
   // Detail Modal State
   const [selectedRequestId, setSelectedRequestId] = useState<string | null>(
@@ -64,6 +89,7 @@ export default function AdminDashboard() {
 
     setUser(currentUser);
     loadRequests();
+    loadUsers();
   }, [router]);
 
   const loadRequests = async () => {
@@ -75,6 +101,49 @@ export default function AdminDashboard() {
       console.error('Failed to load admin requests:', err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadUsers = async () => {
+    try {
+      setUsersLoading(true);
+      const data = await api.getUsers();
+      setUsersList(data);
+    } catch (err: any) {
+      console.error('Failed to load users list:', err);
+    } finally {
+      setUsersLoading(false);
+    }
+  };
+
+  const handleCreateUser = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setAddUserLoading(true);
+    setAddUserError(null);
+    setAddUserSuccess(null);
+
+    try {
+      await api.createUser({
+        name: newUserName,
+        email: newUserEmail,
+        password: newUserPassword,
+        role: newUserRole,
+        annual_days: Number(newUserAnnualDays),
+        sick_days: Number(newUserSickDays),
+      });
+
+      setAddUserSuccess(`Account for ${newUserName} created successfully with default leave balances!`);
+      setNewUserName('');
+      setNewUserEmail('');
+      setNewUserPassword('');
+      setNewUserRole('EMPLOYEE');
+      setNewUserAnnualDays(20);
+      setNewUserSickDays(10);
+      await loadUsers();
+    } catch (err: any) {
+      setAddUserError(err.message || 'Failed to create user');
+    } finally {
+      setAddUserLoading(false);
     }
   };
 
@@ -180,7 +249,44 @@ export default function AdminDashboard() {
           </p>
         </div>
 
-        {/* Metric Cards */}
+        {/* Navigation Tabs */}
+        <div className="mb-6 flex border-b border-slate-200 dark:border-slate-800">
+          <button
+            type="button"
+            onClick={() => setActiveTab('REQUESTS')}
+            className={`flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-semibold transition ${
+              activeTab === 'REQUESTS'
+                ? 'border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400'
+                : 'border-transparent text-slate-500 hover:border-slate-300 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'
+            }`}
+          >
+            <FileText className="h-4 w-4" />
+            <span>Leave Requests</span>
+            <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+              {requests.length}
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab('EMPLOYEES')}
+            className={`flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-semibold transition ${
+              activeTab === 'EMPLOYEES'
+                ? 'border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400'
+                : 'border-transparent text-slate-500 hover:border-slate-300 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'
+            }`}
+          >
+            <Users className="h-4 w-4" />
+            <span>Employee Directory</span>
+            <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+              {usersList.length}
+            </span>
+          </button>
+        </div>
+
+        {activeTab === 'REQUESTS' ? (
+          <>
+            {/* Metric Cards */}
         <div className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
           <div className="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
             <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">
@@ -357,6 +463,149 @@ export default function AdminDashboard() {
             </div>
           )}
         </div>
+      </>
+    ) : (
+      <div className="space-y-6">
+        {/* Employee Metrics */}
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <div className="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+            <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+              Total Staff
+            </p>
+            <p className="mt-2 text-2xl font-black text-slate-900 dark:text-white">
+              {usersList.length}
+            </p>
+          </div>
+          <div className="rounded-2xl border border-blue-200/80 bg-blue-50/40 p-5 shadow-sm dark:border-blue-900/40 dark:bg-blue-950/20">
+            <p className="text-xs font-semibold uppercase tracking-wider text-blue-700 dark:text-blue-400">
+              Regular Employees
+            </p>
+            <p className="mt-2 text-2xl font-black text-blue-700 dark:text-blue-300">
+              {usersList.filter((u) => u.role === 'EMPLOYEE').length}
+            </p>
+          </div>
+          <div className="rounded-2xl border border-purple-200/80 bg-purple-50/40 p-5 shadow-sm dark:border-purple-900/40 dark:bg-purple-950/20">
+            <p className="text-xs font-semibold uppercase tracking-wider text-purple-700 dark:text-purple-400">
+              Administrators
+            </p>
+            <p className="mt-2 text-2xl font-black text-purple-700 dark:text-purple-300">
+              {usersList.filter((u) => u.role === 'ADMIN').length}
+            </p>
+          </div>
+        </div>
+
+        {/* Employee Directory Table */}
+        <div className="rounded-2xl border border-slate-200/80 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+          <div className="flex flex-col gap-4 border-b border-slate-100 p-6 sm:flex-row sm:items-center sm:justify-between dark:border-slate-800">
+            <div>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+                Company Staff Directory
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Provision new employee accounts and manage organizational roles.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setAddUserError(null);
+                setAddUserSuccess(null);
+                setIsAddUserModalOpen(true);
+              }}
+              className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-xs font-semibold text-white shadow-sm transition hover:bg-blue-700"
+            >
+              <UserPlus className="h-4 w-4" />
+              <span>Add New Employee</span>
+            </button>
+          </div>
+
+          {usersLoading ? (
+            <div className="flex justify-center p-12">
+              <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+            </div>
+          ) : usersList.length === 0 ? (
+            <div className="p-12 text-center text-sm text-slate-500">
+              No staff members found.
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-sm">
+                <thead className="bg-slate-50/75 text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:bg-slate-800/50 dark:text-slate-400">
+                  <tr>
+                    <th className="py-3.5 pl-6 pr-3">Staff Member</th>
+                    <th className="px-3 py-3.5">Email</th>
+                    <th className="px-3 py-3.5">System Role</th>
+                    <th className="px-3 py-3.5">Onboarded</th>
+                    <th className="py-3.5 pl-3 pr-6 text-right">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                  {usersList.map((u) => {
+                    const initials = u.name
+                      .split(' ')
+                      .map((n) => n[0])
+                      .join('')
+                      .toUpperCase()
+                      .slice(0, 2);
+                    return (
+                      <tr
+                        key={u.id}
+                        className="transition hover:bg-slate-50/50 dark:hover:bg-slate-800/30"
+                      >
+                        <td className="py-4 pl-6 pr-3">
+                          <div className="flex items-center gap-3">
+                            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-700 dark:bg-blue-950 dark:text-blue-300">
+                              {initials}
+                            </div>
+                            <div>
+                              <div className="font-semibold text-slate-900 dark:text-white">
+                                {u.name}
+                              </div>
+                              <div className="font-mono text-[11px] text-slate-400">
+                                ID: {u.id.slice(0, 8)}...
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-3 py-4 text-xs text-slate-600 dark:text-slate-300">
+                          {u.email}
+                        </td>
+                        <td className="px-3 py-4">
+                          {u.role === 'ADMIN' ? (
+                            <span className="inline-flex items-center gap-1 rounded-full bg-purple-50 px-2.5 py-0.5 text-[11px] font-medium text-purple-700 dark:bg-purple-950/40 dark:text-purple-300">
+                              <ShieldCheck className="h-3 w-3" /> Admin
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-0.5 text-[11px] font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                              <UserIcon className="h-3 w-3" /> Employee
+                            </span>
+                          )}
+                        </td>
+                        <td className="px-3 py-4 text-xs text-slate-500">
+                          {new Date(u.createdAt).toLocaleDateString(
+                            undefined,
+                            {
+                              year: 'numeric',
+                              month: 'short',
+                              day: 'numeric',
+                            },
+                          )}
+                        </td>
+                        <td className="py-4 pl-3 pr-6 text-right">
+                          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-medium text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300">
+                            <CheckCircle2 className="h-3 w-3" /> Active
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      </div>
+    )}
 
         {/* Request Detail & Decision Modal */}
         {selectedRequestId && (
@@ -561,6 +810,156 @@ export default function AdminDashboard() {
                   )}
                 </div>
               ) : null}
+            </div>
+          </div>
+        )}
+
+        {/* Add Employee Modal */}
+        {isAddUserModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm">
+            <div className="w-full max-w-lg rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl dark:border-slate-800 dark:bg-slate-900">
+              <div className="flex items-start justify-between border-b border-slate-100 pb-4 dark:border-slate-800">
+                <div className="flex items-center gap-2.5">
+                  <div className="rounded-xl bg-blue-100 p-2 text-blue-700 dark:bg-blue-950 dark:text-blue-300">
+                    <UserPlus className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+                      Add New Employee
+                    </h3>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                      Provision credentials and initialize annual leave balances.
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsAddUserModalOpen(false)}
+                  className="rounded-lg p-1 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+
+              {addUserError && (
+                <div className="mt-4 flex items-center gap-2 rounded-xl bg-rose-50 p-3 text-xs text-rose-700 dark:bg-rose-950/40 dark:text-rose-300">
+                  <AlertCircle className="h-4 w-4 shrink-0" />
+                  <span>{addUserError}</span>
+                </div>
+              )}
+
+              {addUserSuccess && (
+                <div className="mt-4 flex items-center gap-2 rounded-xl bg-emerald-50 p-3 text-xs text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300">
+                  <CheckCircle2 className="h-4 w-4 shrink-0" />
+                  <span>{addUserSuccess}</span>
+                </div>
+              )}
+
+              <form onSubmit={handleCreateUser} className="mt-5 space-y-4">
+                <div>
+                  <label className="mb-1 block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                    Full Name <span className="text-rose-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={newUserName}
+                    onChange={(e) => setNewUserName(e.target.value)}
+                    placeholder="e.g. Sarah Jenkins"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="mb-1 block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                    Email Address <span className="text-rose-500">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    value={newUserEmail}
+                    onChange={(e) => setNewUserEmail(e.target.value)}
+                    placeholder="e.g. sarah.jenkins@company.com"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="mb-1 block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                    Password <span className="text-rose-500">*</span>
+                  </label>
+                  <input
+                    type="password"
+                    required
+                    minLength={6}
+                    value={newUserPassword}
+                    onChange={(e) => setNewUserPassword(e.target.value)}
+                    placeholder="Minimum 6 characters"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="mb-1 block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                    System Role
+                  </label>
+                  <select
+                    value={newUserRole}
+                    onChange={(e) => setNewUserRole(e.target.value as 'EMPLOYEE' | 'ADMIN')}
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                  >
+                    <option value="EMPLOYEE">Employee (Can request leave, view personal balances)</option>
+                    <option value="ADMIN">Administrator (Can review requests, provision accounts)</option>
+                  </select>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3 pt-1">
+                  <div>
+                    <label className="mb-1 block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                      Annual Leave Days
+                    </label>
+                    <input
+                      type="number"
+                      min={0}
+                      value={newUserAnnualDays}
+                      onChange={(e) => setNewUserAnnualDays(Number(e.target.value))}
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                    />
+                    <p className="mt-1 text-[11px] text-slate-400">Default: 20 days/year</p>
+                  </div>
+                  <div>
+                    <label className="mb-1 block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                      Sick Leave Days
+                    </label>
+                    <input
+                      type="number"
+                      min={0}
+                      value={newUserSickDays}
+                      onChange={(e) => setNewUserSickDays(Number(e.target.value))}
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                    />
+                    <p className="mt-1 text-[11px] text-slate-400">Default: 10 days/year</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100 dark:border-slate-800">
+                  <button
+                    type="button"
+                    onClick={() => setIsAddUserModalOpen(false)}
+                    className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={addUserLoading}
+                    className="flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-semibold text-white shadow-sm transition hover:bg-blue-700 disabled:opacity-50"
+                  >
+                    {addUserLoading && <Loader2 className="h-4 w-4 animate-spin" />}
+                    <span>Create Employee</span>
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         )}
