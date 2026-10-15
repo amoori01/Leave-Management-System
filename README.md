@@ -127,12 +127,13 @@ docker compose up -d --build
 
 ---
 
-## 🔑 Default Seed Accounts
+## 🔑 Default Seed Account
 
-| Role | Email | Password | Initial Balance |
+| Role | Email | Password | Access Level |
 |---|---|---|---|
-| **System Admin** | `admin@example.com` | `Admin123!` | Full Admin Privileges |
-| **Demo Employee** | `employee@example.com` | `Employee123!` | Annual: 20 days, Sick: 10 days |
+| **System Admin** | `admin@example.com` | `Admin123!` | Full Administrator Privileges (Staff Provisioning & Leave Review) |
+
+> ℹ️ **Employee Accounts:** Per the employee management workflow, employee accounts are created and provisioned directly by the System Administrator via the Admin Portal (`/admin`).
 
 ---
 
