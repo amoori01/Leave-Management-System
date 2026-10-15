@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Patch,
-  Param,
-  Body,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Post, Patch, Param, Body, UseGuards } from '@nestjs/common';
 import { LeaveRequestsService } from './leave-requests.service';
 import { CreateLeaveRequestDto } from './dto/create-leave-request.dto';
 import { RejectLeaveRequestDto } from './dto/reject-leave-request.dto';

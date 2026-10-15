@@ -95,6 +95,7 @@ describe('LeaveRequestsService', () => {
           leave_type_id: 'type-annual',
           start_date: '2020-01-01',
           end_date: '2020-01-05',
+          reason: 'Vacation',
         }),
       ).rejects.toThrow(BadRequestException);
     });
@@ -105,6 +106,7 @@ describe('LeaveRequestsService', () => {
           leave_type_id: 'type-annual',
           start_date: futureEndStr,
           end_date: tomorrowStr,
+          reason: 'Vacation',
         }),
       ).rejects.toThrow(BadRequestException);
     });
@@ -125,6 +127,7 @@ describe('LeaveRequestsService', () => {
           leave_type_id: 'type-annual',
           start_date: tomorrowStr,
           end_date: futureEndStr,
+          reason: 'Vacation',
         }),
       ).rejects.toThrow(BadRequestException);
     });
@@ -144,6 +147,7 @@ describe('LeaveRequestsService', () => {
           leave_type_id: 'type-annual',
           start_date: tomorrowStr,
           end_date: futureEndStr,
+          reason: 'Vacation',
         }),
       ).rejects.toThrow(BadRequestException);
     });
