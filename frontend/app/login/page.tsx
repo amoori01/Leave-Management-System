@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { api } from '../../lib/api';
-import { Calendar, Lock, Mail, ArrowRight, ShieldCheck, UserCheck, AlertCircle, Loader2 } from 'lucide-react';
+import { Calendar, Lock, Mail, ArrowRight, AlertCircle, Loader2 } from 'lucide-react';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -31,12 +31,6 @@ export default function LoginPage() {
     }
   };
 
-  const handleQuickFill = (demoEmail: string, demoPass: string) => {
-    setEmail(demoEmail);
-    setPassword(demoPass);
-    setError(null);
-  };
-
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-slate-50 p-4 dark:bg-slate-950">
       <div className="w-full max-w-md">
@@ -46,11 +40,8 @@ export default function LoginPage() {
             <Calendar className="h-7 w-7" />
           </div>
           <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
-            Welcome to LeaveFlow
+            Welcome to LMS
           </h1>
-          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-            Sign in to manage your leave requests and balances
-          </p>
         </div>
 
         {/* Login Card */}
@@ -119,31 +110,6 @@ export default function LoginPage() {
               )}
             </button>
           </form>
-
-          {/* Quick Demo Fill Buttons */}
-          <div className="mt-6 border-t border-slate-100 pt-5 dark:border-slate-800">
-            <p className="mb-2.5 text-center text-[11px] font-medium uppercase tracking-wider text-slate-400">
-              One-Click Demo Accounts
-            </p>
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                type="button"
-                onClick={() => handleQuickFill('employee@example.com', 'Employee123!')}
-                className="flex items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-medium text-slate-700 transition hover:border-blue-300 hover:bg-blue-50/50 hover:text-blue-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-blue-700"
-              >
-                <UserCheck className="h-3.5 w-3.5 text-blue-600" />
-                <span>Employee</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => handleQuickFill('admin@example.com', 'Admin123!')}
-                className="flex items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-medium text-slate-700 transition hover:border-purple-300 hover:bg-purple-50/50 hover:text-purple-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-purple-700"
-              >
-                <ShieldCheck className="h-3.5 w-3.5 text-purple-600" />
-                <span>Admin</span>
-              </button>
-            </div>
-          </div>
         </div>
       </div>
     </div>
