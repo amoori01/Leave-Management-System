@@ -190,6 +190,12 @@ export const api = {
       body: JSON.stringify(payload),
     });
   },
+
+  async deleteUser(id: string): Promise<{ message: string }> {
+    return apiFetch<{ message: string }>(`/users/${id}`, {
+      method: 'DELETE',
+    });
+  },
 };
 
 export interface ManagedUser {

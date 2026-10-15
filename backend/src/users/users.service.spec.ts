@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from './users.service';
 import { PrismaService } from '../prisma/prisma.service';
-import { ConflictException } from '@nestjs/common';
+import { ConflictException, BadRequestException, NotFoundException } from '@nestjs/common';
 import { Role } from '@prisma/client';
 import * as bcrypt from 'bcryptjs';
 
@@ -20,6 +20,7 @@ describe('UsersService', () => {
         findUnique: jest.fn(),
         create: jest.fn(),
         findMany: jest.fn(),
+        delete: jest.fn(),
       },
       leaveType: {
         findMany: jest.fn().mockResolvedValue(mockLeaveTypes),
@@ -179,6 +180,39 @@ describe('UsersService', () => {
       expect(users).toHaveLength(2);
       expect(users[0].email).toBe('admin@example.com');
       expect((users[0] as any).password_hash).toBeUndefined();
+    });
+  });
+
+  describe('remove', () => {
+    it('should successfully remove an employee user', async () => {
+      prisma.user.findUnique.mockResolvedValue({
+        id: 'user-to-delete',
+        name: 'Sarah Connor',
+        role: Role.EMPLOYEE,
+      });
+      prisma.user.delete.mockResolvedValue({});
+
+      const result = await service.remove('user-to-delete', 'admin-id');
+      expect(result.message).toContain('Sarah Connor removed successfully');
+      expect(prisma.user.delete).toHaveBeenCalledWith({
+        where: { id: 'user-to-delete' },
+      });
+    });
+
+    it('should throw BadRequestException if an admin attempts to delete themselves', async () => {
+      await expect(service.remove('admin-id', 'admin-id')).rejects.toThrow(
+        BadRequestException,
+      );
+      expect(prisma.user.delete).not.toHaveBeenCalled();
+    });
+
+    it('should throw NotFoundException if user to delete does not exist', async () => {
+      prisma.user.findUnique.mockResolvedValue(null);
+
+      await expect(
+        service.remove('non-existent-user', 'admin-id'),
+      ).rejects.toThrow(NotFoundException);
+      expect(prisma.user.delete).not.toHaveBeenCalled();
     });
   });
 });

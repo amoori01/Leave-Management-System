@@ -2,6 +2,8 @@ import {
   Controller,
   Get,
   Post,
+  Delete,
+  Param,
   Body,
   UseGuards,
 } from '@nestjs/common';
@@ -10,6 +12,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
+import { CurrentUser, type AuthenticatedUser } from '../auth/decorators/current-user.decorator';
 import { Role } from '@prisma/client';
 
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -26,5 +29,13 @@ export class UsersController {
   @Get()
   async findAll(): Promise<SafeUser[]> {
     return this.usersService.findAll();
+  }
+
+  @Delete(':id')
+  async remove(
+    @Param('id') id: string,
+    @CurrentUser() admin: AuthenticatedUser,
+  ): Promise<{ message: string }> {
+    return this.usersService.remove(id, admin.userId);
   }
 }

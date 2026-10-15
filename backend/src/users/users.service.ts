@@ -1,4 +1,9 @@
-import { Injectable, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  ConflictException,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { Role } from '@prisma/client';
@@ -95,5 +100,25 @@ export class UsersService {
       },
       orderBy: { createdAt: 'desc' },
     });
+  }
+
+  async remove(userId: string, currentAdminId: string): Promise<{ message: string }> {
+    if (userId === currentAdminId) {
+      throw new BadRequestException('You cannot delete your own administrator account');
+    }
+
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    await this.prisma.user.delete({
+      where: { id: userId },
+    });
+
+    return { message: `Employee ${user.name} removed successfully` };
   }
 }
