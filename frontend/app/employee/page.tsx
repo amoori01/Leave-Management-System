@@ -120,6 +120,11 @@ export default function EmployeeDashboard() {
     e.preventDefault();
     if (clientError) return;
 
+    if (!reason.trim()) {
+      setClientError('Reason is required. Please provide context for your leave request.');
+      return;
+    }
+
     setFormSubmitting(true);
     setSuccessMessage(null);
 
@@ -128,7 +133,7 @@ export default function EmployeeDashboard() {
         leave_type_id: leaveTypeId,
         start_date: startDate,
         end_date: endDate,
-        reason: reason.trim() || undefined,
+        reason: reason.trim(),
       });
 
       setSuccessMessage('Leave request submitted successfully!');
@@ -327,20 +332,21 @@ export default function EmployeeDashboard() {
 
                 <div>
                   <label className="mb-1 block text-xs font-semibold text-slate-700 dark:text-slate-300">
-                    Reason (Optional)
+                    Reason <span className="text-rose-500">*</span>
                   </label>
                   <textarea
                     rows={3}
+                    required
                     value={reason}
                     onChange={(e) => setReason(e.target.value)}
-                    placeholder="Provide context for your manager (optional)"
+                    placeholder="Please specify the reason for your leave request"
                     className="w-full rounded-xl border border-slate-200 bg-slate-50/50 p-3 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                   />
                 </div>
 
                 <button
                   type="submit"
-                  disabled={formSubmitting || !!clientError || !startDate || !endDate}
+                  disabled={formSubmitting || !!clientError || !startDate || !endDate || !reason.trim()}
                   className="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 active:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-blue-600 dark:hover:bg-blue-700"
                 >
                   {formSubmitting ? (

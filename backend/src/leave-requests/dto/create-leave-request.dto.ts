@@ -13,7 +13,7 @@ export class CreateLeaveRequestDto {
   @IsNotEmpty({ message: 'end_date is required' })
   end_date: string;
 
-  @IsOptional()
   @IsString({ message: 'reason must be a string' })
-  reason?: string;
+  @IsNotEmpty({ message: 'reason is required' })
+  reason: string;
 }

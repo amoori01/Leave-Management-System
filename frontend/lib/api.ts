@@ -149,7 +149,7 @@ export const api = {
     leave_type_id: string;
     start_date: string;
     end_date: string;
-    reason?: string;
+    reason: string;
   }): Promise<LeaveRequest> {
     return apiFetch<LeaveRequest>('/leave-requests', {
       method: 'POST',
