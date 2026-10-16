@@ -1,4 +1,4 @@
-import { IsISO8601, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsISO8601, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateLeaveRequestDto {
   @IsString({ message: 'leave_type_id must be a string' })

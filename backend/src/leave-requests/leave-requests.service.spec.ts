@@ -2,8 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { LeaveRequestsService } from './leave-requests.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { BalancesService } from '../balances/balances.service';
-import { BadRequestException, ConflictException, NotFoundException } from '@nestjs/common';
-import { RequestStatus, Role } from '@prisma/client';
+import { BadRequestException, ConflictException } from '@nestjs/common';
+import { RequestStatus } from '@prisma/client';
 
 describe('LeaveRequestsService', () => {
   let service: LeaveRequestsService;

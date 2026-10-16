@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { api } from '../../lib/api';
-import { Calendar, Lock, Mail, ArrowRight, AlertCircle, Loader2 } from 'lucide-react';
+import { Lock, Mail, ArrowRight, AlertCircle, Loader2 } from 'lucide-react';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -36,9 +36,6 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         {/* Brand Header */}
         <div className="mb-8 text-center">
-          <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-600 text-white shadow-md shadow-blue-500/20">
-            <Calendar className="h-7 w-7" />
-          </div>
           <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
             Welcome to LMS
           </h1>
