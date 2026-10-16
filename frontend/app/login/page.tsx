@@ -74,7 +74,7 @@ export default function LoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@example.com"
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50/50 py-2.5 pl-9 pr-3 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:focus:border-blue-400"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50/50 py-2.5 pl-9 pr-3 text-sm text-slate-900 outline-none transition focus:border-zinc-800 focus:bg-white focus:ring-4 focus:ring-zinc-800/10 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:focus:border-zinc-400"
                 />
               </div>
             </div>
@@ -93,7 +93,7 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50/50 py-2.5 pl-9 pr-3 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:focus:border-blue-400"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50/50 py-2.5 pl-9 pr-3 text-sm text-slate-900 outline-none transition focus:border-zinc-800 focus:bg-white focus:ring-4 focus:ring-zinc-800/10 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:focus:border-zinc-400"
                 />
               </div>
             </div>
@@ -101,7 +101,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 active:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-500/20 disabled:cursor-not-allowed disabled:opacity-70 dark:bg-blue-600 dark:hover:bg-blue-700"
+              className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-black via-zinc-900 to-zinc-700 py-2.5 text-sm font-semibold text-white shadow-md transition hover:from-zinc-900 hover:to-zinc-800 active:from-black active:to-zinc-900 focus:outline-none focus:ring-4 focus:ring-zinc-500/20 disabled:cursor-not-allowed disabled:opacity-70"
             >
               {loading ? (
                 <>

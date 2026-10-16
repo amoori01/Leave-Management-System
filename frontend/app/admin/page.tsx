@@ -273,7 +273,7 @@ export default function AdminDashboard() {
             onClick={() => setActiveTab('REQUESTS')}
             className={`flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-semibold transition ${
               activeTab === 'REQUESTS'
-                ? 'border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400'
+                ? 'border-zinc-950 text-zinc-950 dark:border-white dark:text-white'
                 : 'border-transparent text-slate-500 hover:border-slate-300 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'
             }`}
           >
@@ -289,7 +289,7 @@ export default function AdminDashboard() {
             onClick={() => setActiveTab('EMPLOYEES')}
             className={`flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-semibold transition ${
               activeTab === 'EMPLOYEES'
-                ? 'border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400'
+                ? 'border-zinc-950 text-zinc-950 dark:border-white dark:text-white'
                 : 'border-transparent text-slate-500 hover:border-slate-300 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'
             }`}
           >
@@ -493,11 +493,11 @@ export default function AdminDashboard() {
               {usersList.length}
             </p>
           </div>
-          <div className="rounded-2xl border border-blue-200/80 bg-blue-50/40 p-5 shadow-sm dark:border-blue-900/40 dark:bg-blue-950/20">
-            <p className="text-xs font-semibold uppercase tracking-wider text-blue-700 dark:text-blue-400">
+          <div className="rounded-2xl border border-zinc-200/80 bg-zinc-50/50 p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900/40">
+            <p className="text-xs font-semibold uppercase tracking-wider text-zinc-700 dark:text-zinc-400">
               Regular Employees
             </p>
-            <p className="mt-2 text-2xl font-black text-blue-700 dark:text-blue-300">
+            <p className="mt-2 text-2xl font-black text-zinc-900 dark:text-white">
               {usersList.filter((u) => u.role === 'EMPLOYEE').length}
             </p>
           </div>
@@ -529,7 +529,7 @@ export default function AdminDashboard() {
                 setAddUserSuccess(null);
                 setIsAddUserModalOpen(true);
               }}
-              className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-xs font-semibold text-white shadow-sm transition hover:bg-blue-700"
+              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-black via-zinc-900 to-zinc-700 px-4 py-2.5 text-xs font-semibold text-white shadow-sm transition hover:from-zinc-900 hover:to-zinc-800 active:from-black active:to-zinc-900"
             >
               <UserPlus className="h-4 w-4" />
               <span>Add New Employee</span>
@@ -538,7 +538,7 @@ export default function AdminDashboard() {
 
           {usersLoading ? (
             <div className="flex justify-center p-12">
-              <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+              <Loader2 className="h-8 w-8 animate-spin text-zinc-900 dark:text-zinc-100" />
             </div>
           ) : usersList.length === 0 ? (
             <div className="p-12 text-center text-sm text-slate-500">
@@ -572,7 +572,7 @@ export default function AdminDashboard() {
                       >
                         <td className="py-4 pl-6 pr-3">
                           <div className="flex items-center gap-3">
-                            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-700 dark:bg-blue-950 dark:text-blue-300">
+                            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-zinc-100 text-xs font-bold text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200">
                               {initials}
                             </div>
                             <div>
@@ -857,7 +857,7 @@ export default function AdminDashboard() {
             <div className="w-full max-w-lg rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl dark:border-slate-800 dark:bg-slate-900">
               <div className="flex items-start justify-between border-b border-slate-100 pb-4 dark:border-slate-800">
                 <div className="flex items-center gap-2.5">
-                  <div className="rounded-xl bg-blue-100 p-2 text-blue-700 dark:bg-blue-950 dark:text-blue-300">
+                  <div className="rounded-xl bg-zinc-100 p-2 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200">
                     <UserPlus className="h-5 w-5" />
                   </div>
                   <div>
@@ -903,7 +903,7 @@ export default function AdminDashboard() {
                     value={newUserName}
                     onChange={(e) => setNewUserName(e.target.value)}
                     placeholder="e.g. Sarah Jenkins"
-                    className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 outline-none transition focus:border-zinc-800 focus:bg-white focus:ring-4 focus:ring-zinc-800/10 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:focus:border-zinc-400"
                   />
                 </div>
 
@@ -917,7 +917,7 @@ export default function AdminDashboard() {
                     value={newUserEmail}
                     onChange={(e) => setNewUserEmail(e.target.value)}
                     placeholder="e.g. sarah.jenkins@company.com"
-                    className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 outline-none transition focus:border-zinc-800 focus:bg-white focus:ring-4 focus:ring-zinc-800/10 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:focus:border-zinc-400"
                   />
                 </div>
 
@@ -932,7 +932,7 @@ export default function AdminDashboard() {
                     value={newUserPassword}
                     onChange={(e) => setNewUserPassword(e.target.value)}
                     placeholder="Minimum 6 characters"
-                    className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 outline-none transition focus:border-zinc-800 focus:bg-white focus:ring-4 focus:ring-zinc-800/10 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:focus:border-zinc-400"
                   />
                 </div>
 
@@ -943,7 +943,7 @@ export default function AdminDashboard() {
                   <select
                     value={newUserRole}
                     onChange={(e) => setNewUserRole(e.target.value as 'EMPLOYEE' | 'ADMIN')}
-                    className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 outline-none transition focus:border-zinc-800 focus:bg-white focus:ring-4 focus:ring-zinc-800/10 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:focus:border-zinc-400"
                   >
                     <option value="EMPLOYEE">Employee (Can request leave, view personal balances)</option>
                     <option value="ADMIN">Administrator (Can review requests, provision accounts)</option>
@@ -960,7 +960,7 @@ export default function AdminDashboard() {
                       min={0}
                       value={newUserAnnualDays}
                       onChange={(e) => setNewUserAnnualDays(Number(e.target.value))}
-                      className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 outline-none transition focus:border-zinc-800 focus:bg-white focus:ring-4 focus:ring-zinc-800/10 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:focus:border-zinc-400"
                     />
                     <p className="mt-1 text-[11px] text-slate-400">Default: 20 days/year</p>
                   </div>
@@ -973,7 +973,7 @@ export default function AdminDashboard() {
                       min={0}
                       value={newUserSickDays}
                       onChange={(e) => setNewUserSickDays(Number(e.target.value))}
-                      className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 outline-none transition focus:border-zinc-800 focus:bg-white focus:ring-4 focus:ring-zinc-800/10 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:focus:border-zinc-400"
                     />
                     <p className="mt-1 text-[11px] text-slate-400">Default: 10 days/year</p>
                   </div>
@@ -990,7 +990,7 @@ export default function AdminDashboard() {
                   <button
                     type="submit"
                     disabled={addUserLoading}
-                    className="flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-semibold text-white shadow-sm transition hover:bg-blue-700 disabled:opacity-50"
+                    className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-black via-zinc-900 to-zinc-700 px-5 py-2.5 text-xs font-semibold text-white shadow-sm transition hover:from-zinc-900 hover:to-zinc-800 active:from-black active:to-zinc-900 disabled:opacity-50"
                   >
                     {addUserLoading && <Loader2 className="h-4 w-4 animate-spin" />}
                     <span>Create Employee</span>

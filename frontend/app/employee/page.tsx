@@ -152,7 +152,7 @@ export default function EmployeeDashboard() {
   if (loading && !user) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-slate-50 dark:bg-slate-950">
-        <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+        <Loader2 className="h-8 w-8 animate-spin text-zinc-900 dark:text-zinc-100" />
       </div>
     );
   }
@@ -201,7 +201,7 @@ export default function EmployeeDashboard() {
                         {b.description || 'Standard leave allowance'}
                       </p>
                     </div>
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-100 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200">
                       <CalendarDays className="h-5 w-5" />
                     </div>
                   </div>
@@ -224,7 +224,7 @@ export default function EmployeeDashboard() {
                             ? 'bg-rose-500'
                             : b.remaining_days <= 3
                             ? 'bg-amber-500'
-                            : 'bg-blue-600'
+                            : 'bg-gradient-to-r from-black to-zinc-600'
                         }`}
                         style={{ width: `${Math.min(100, usedPercentage)}%` }}
                       />
@@ -246,7 +246,7 @@ export default function EmployeeDashboard() {
           <div className="lg:col-span-5">
             <div className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
               <div className="mb-4 flex items-center gap-2">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-100 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200">
                   <Send className="h-4 w-4" />
                 </div>
                 <div>
@@ -282,7 +282,7 @@ export default function EmployeeDashboard() {
                     value={leaveTypeId}
                     onChange={(e) => setLeaveTypeId(e.target.value)}
                     required
-                    className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-zinc-800 focus:bg-white focus:ring-4 focus:ring-zinc-800/10 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:focus:border-zinc-400"
                   >
                     {balances.map((b) => (
                       <option key={b.leave_type_id} value={b.leave_type_id}>
@@ -303,7 +303,7 @@ export default function EmployeeDashboard() {
                       value={startDate}
                       min={new Date().toISOString().split('T')[0]}
                       onChange={(e) => setStartDate(e.target.value)}
-                      className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-zinc-800 focus:bg-white focus:ring-4 focus:ring-zinc-800/10 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:focus:border-zinc-400"
                     />
                   </div>
                   <div>
@@ -316,15 +316,15 @@ export default function EmployeeDashboard() {
                       value={endDate}
                       min={startDate || new Date().toISOString().split('T')[0]}
                       onChange={(e) => setEndDate(e.target.value)}
-                      className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-zinc-800 focus:bg-white focus:ring-4 focus:ring-zinc-800/10 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:focus:border-zinc-400"
                     />
                   </div>
                 </div>
 
                 {calculatedDays !== null && (
-                  <div className="flex items-center justify-between rounded-xl bg-blue-50/60 p-3 text-xs text-blue-900 dark:bg-blue-950/40 dark:text-blue-300">
+                  <div className="flex items-center justify-between rounded-xl bg-zinc-100/80 p-3 text-xs text-zinc-900 dark:bg-zinc-800/60 dark:text-zinc-200">
                     <span className="font-medium">Calculated Calendar Days:</span>
-                    <span className="font-bold text-blue-700 dark:text-blue-400">
+                    <span className="font-bold text-zinc-950 dark:text-white">
                       {calculatedDays} {calculatedDays === 1 ? 'day' : 'days'}
                     </span>
                   </div>
@@ -340,14 +340,14 @@ export default function EmployeeDashboard() {
                     value={reason}
                     onChange={(e) => setReason(e.target.value)}
                     placeholder="Please specify the reason for your leave request"
-                    className="w-full rounded-xl border border-slate-200 bg-slate-50/50 p-3 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50/50 p-3 text-sm text-slate-900 outline-none transition focus:border-zinc-800 focus:bg-white focus:ring-4 focus:ring-zinc-800/10 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:focus:border-zinc-400"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={formSubmitting || !!clientError || !startDate || !endDate || !reason.trim()}
-                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 active:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-blue-600 dark:hover:bg-blue-700"
+                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-black via-zinc-900 to-zinc-700 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:from-zinc-900 hover:to-zinc-800 active:from-black active:to-zinc-900 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {formSubmitting ? (
                     <>
