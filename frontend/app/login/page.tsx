@@ -32,17 +32,26 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-slate-50 p-4 dark:bg-slate-950">
-      <div className="w-full max-w-md">
+    <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden p-4">
+      {/* Background Wallpaper with Blur */}
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105 filter blur-[6px]"
+        style={{ backgroundImage: "url('/_.jpeg')" }}
+        aria-hidden="true"
+      />
+      {/* 35% dark/tint overlay for optimal contrast and readability */}
+      <div className="absolute inset-0 bg-slate-950/35" aria-hidden="true" />
+
+      <div className="relative z-10 w-full max-w-md">
         {/* Brand Header */}
         <div className="mb-8 text-center">
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+          <h1 className="text-2xl font-bold tracking-tight text-white drop-shadow-md">
             Welcome to LMS
           </h1>
         </div>
 
         {/* Login Card */}
-        <div className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-xl shadow-slate-200/50 sm:p-8 dark:border-slate-800 dark:bg-slate-900 dark:shadow-none">
+        <div className="rounded-2xl border border-white/20 bg-white/95 p-6 shadow-2xl backdrop-blur-xl sm:p-8 dark:border-slate-800 dark:bg-slate-900/95">
           {error && (
             <div className="mb-5 flex items-start gap-2.5 rounded-xl border border-red-200 bg-red-50/80 p-3.5 text-xs text-red-700 dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-300">
               <AlertCircle className="h-4 w-4 shrink-0 text-red-500" />
