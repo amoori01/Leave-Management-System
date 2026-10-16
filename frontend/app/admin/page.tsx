@@ -257,14 +257,9 @@ export default function AdminDashboard() {
       <main className="mx-auto max-w-7xl px-4 pt-8 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
-          <div className="flex items-center gap-2">
-            <span className="rounded-md bg-purple-100 p-1 text-purple-700 dark:bg-purple-950 dark:text-purple-300">
-              <ShieldCheck className="h-5 w-5" />
-            </span>
-            <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
-              Administrator Review Portal
-            </h2>
-          </div>
+          <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+            Administrator Review Portal
+          </h2>
           <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
             Review company-wide leave requests, inspect employee balances, and
             record decisions.
